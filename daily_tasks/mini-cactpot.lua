@@ -1,8 +1,8 @@
 --[=====[
 [[SND Metadata]]
 author: Serras
-version: 1.2.1
-description: Goes to the Mini Cactpot Broker, interacts, waits for YesAlready to finish, and ends once the final dialog appears.
+version: 1.3.0
+description: Goes to the Mini Cactpot Broker, interacts, lets YesAlready handle tickets, and ends when final dialog appears.
 plugin_dependencies:
 - Lifestream
 - vnavmesh
@@ -19,8 +19,11 @@ Npc = {
 
 LogPrefix = "[MiniCactpot]"
 
-DialogPrefix = "Your patronage is most appreciated"
-DialogSuffix = "I hope to see you again tomorrow"
+Dialog1Part1 = "Your patronage is most appreciated"
+Dialog1Part2 = "I hope to see you again tomorrow"
+
+Dialog2Part1 = "Thank you for your patronage"
+Dialog2Part2 = "you can only purchase three Mini Cactpot tickets a day"
 
 function Wait(t)
     yield("/wait " .. t)
@@ -103,7 +106,10 @@ function WaitForFinalDialog(timeout)
             local node = talk:GetNode(0, 4)
             if node and node.Text then
                 local text = node.Text
-                if text:find(DialogPrefix, 1, true) and text:find(DialogSuffix, 1, true) then
+                if text:find(Dialog1Part1, 1, true) and text:find(Dialog1Part2, 1, true) then
+                    return true
+                end
+                if text:find(Dialog2Part1, 1, true) and text:find(Dialog2Part2, 1, true) then
                     return true
                 end
             end
