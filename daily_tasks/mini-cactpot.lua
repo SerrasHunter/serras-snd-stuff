@@ -1,8 +1,8 @@
 --[=====[
 [[SND Metadata]]
-author: SerrasVictoria
-version: 1.0.1
-description: Teleports to Gold Saucer, walks to Mini Cactpot Trader, and interacts. YesAlready handles ticket purchase.
+author: Serras
+version: 1.2.1
+description: Goes to the Mini Cactpot Broker, interacts, waits for YesAlready to finish, and ends once the final dialog appears.
 plugin_dependencies:
 - Lifestream
 - vnavmesh
@@ -18,6 +18,9 @@ Npc = {
 }
 
 LogPrefix = "[MiniCactpot]"
+
+DialogPrefix = "Your patronage is most appreciated"
+DialogSuffix = "I hope to see you again tomorrow"
 
 function Wait(t)
     yield("/wait " .. t)
@@ -91,10 +94,29 @@ function GoToSeller()
     WaitForPathRunning()
 end
 
+function WaitForFinalDialog(timeout)
+    timeout = timeout or 30
+    local start = os.clock()
+    while os.clock() - start < timeout do
+        local talk = Addons.GetAddon("Talk")
+        if talk and talk.Ready then
+            local node = talk:GetNode(0, 4)
+            if node and node.Text then
+                local text = node.Text
+                if text:find(DialogPrefix, 1, true) and text:find(DialogSuffix, 1, true) then
+                    return true
+                end
+            end
+        end
+        Wait(0.1)
+    end
+    return false
+end
+
 function Main()
     WaitForPlayer()
     Interact(Npc.Name)
-    Wait(1)
+    WaitForFinalDialog(30)
     return false
 end
 
