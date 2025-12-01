@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author: SerrasVictoria
-version: 1.0.0
+version: 1.0.1
 description: Teleports to Gold Saucer, walks to Mini Cactpot Trader, and interacts. YesAlready handles ticket purchase.
 plugin_dependencies:
 - Lifestream
@@ -14,7 +14,7 @@ import("System.Numerics")
 
 Npc = {
     Name = "Mini Cactpot Broker",
-    Position = { X = -52.42, Y = 1.60, Z = 15.77 }
+    Position = { X = -46.52, Y = 1.60, Z = 20.76 }
 }
 
 LogPrefix = "[MiniCactpot]"
